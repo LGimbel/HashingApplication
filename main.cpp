@@ -2,6 +2,16 @@
 #include <unordered_map>
 #include <string>
 
+void removePart(std::unordered_map<std::string, int>& PartsMap, const std::string& partName) {
+    auto it = PartsMap.find(partName);
+    if (it != PartsMap.end()) {
+        PartsMap.erase(it);
+        std::cout << "Part '" << partName << "' removed successfully.\n";
+    } else {
+        std::cout << "Part '" << partName << "' not found. Please Try Again.\n";
+    }
+}
+
 //menu
 void menu() {
     std::unordered_map<std::string, int> PartsMap;
@@ -38,7 +48,7 @@ void menu() {
                     std::cout << "Part name cannot be empty. Please try again.\n";
                     break;
                 }
-                //TODO remove part function
+                removePart(PartsMap, partName);
                 hasSaved = false;
                 break;
             }
