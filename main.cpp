@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <string>
+#include <fstream> // for file handling
 
 void removePart(std::unordered_map<std::string, int>& PartsMap, const std::string& partName) {
     auto it = PartsMap.find(partName);
@@ -10,6 +11,37 @@ void removePart(std::unordered_map<std::string, int>& PartsMap, const std::strin
     } else {
         std::cout << "Part '" << partName << "' not found. Please Try Again.\n";
     }
+}
+
+// function to export data to file
+void exporttofile(const std::unordered_map<std::string, int>& PartsMap, const std::string& filename) {
+    std::ofstream outfile(filename);
+    if (!outfile) {
+        std::cout << "Error opening file '" << filename << "' for writing.\n";
+        return;
+    }
+    for (const auto& entry : PartsMap) {
+        outfile << entry.first << " " << entry.second << "\n"; // write part name and number to file
+    }
+    outfile.close(); // close the file
+    std::cout << "Data exported to file '" << filename << "' successfully.\n";
+}
+
+// function to import data from file
+void importfromfile(std::unordered_map<std::string, int>& PartsMap, const std::string& filename) {
+    std::ifstream infile(filename);
+    if (!infile) {
+        std::cout << "Error opening file '" << filename << "' for reading.\n";
+        return;
+    }
+    PartsMap.clear(); // clears existing data before importing to avoid duplicates; remove if merging data is preferred
+    std::string partName;
+    int partNumber;
+    while (infile >> partName >> partNumber) {
+        PartsMap[partName] = partNumber; // read part name and number from file and add to map
+    }
+    infile.close(); // close the file
+    std::cout << "Data imported from file '" << filename << "' successfully.\n";
 }
 
 //menu
@@ -86,13 +118,14 @@ void menu() {
 
             case 6: {
                 // Import from File
-                //TODO import from file function
+                importfromfile(PartsMap, "partsdata.txt");
+                hasSaved = true;
                 break;
             }
 
             case 7: {
                 // Export to File
-                //TODO export to file function
+                exporttofile(PartsMap, "partsdata.txt");
                 hasSaved = true;
                 break;
             }
@@ -103,7 +136,7 @@ void menu() {
                     char saveChoice;
                     std::cin >> saveChoice;
                     if (saveChoice == 'y' || saveChoice == 'Y') {
-                        //TODO call export to file function
+                        exporttofile(PartsMap, "partsdata.txt"); // save to file
                     }
                 }
 
