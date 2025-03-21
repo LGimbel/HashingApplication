@@ -44,6 +44,46 @@ void importfromfile(std::unordered_map<std::string, int>& PartsMap, const std::s
     std::cout << "Data imported from file '" << filename << "' successfully.\n";
 }
 
+// Function to search for a part by name
+void searchPart(const std::unordered_map<std::string, int>& PartsMap, const std::string& partName) {
+    auto it = PartsMap.find(partName);
+    if (it != PartsMap.end()) {
+        std::cout << "Part found: " << it->first << " - " << it->second << "\n";
+    } else {
+        std::cout << "Part '" << partName << "' not found.\n";
+    }
+
+// Function to display all parts
+void displayAllParts(const std::unordered_map<std::string, int>& PartsMap) {
+    if (PartsMap.empty()) {
+        std::cout << "No parts available to display.\n";
+        return;
+    }
+    std::cout << "All parts:\n";
+    for (const auto& entry : PartsMap) {
+        std::cout << entry.first << ": " << entry.second << "\n";
+    }
+}
+
+// Menu function
+void menu() {
+    std::unordered_map<std::string, int> PartsMap; // Holds part names and numbers
+    int choice = 0;
+    std::string partName;
+    bool hasSaved = true;
+    bool exit = false;
+
+    const std::string menu =
+        "Please choose one of the following:\n"
+        "1. Add Part\n"
+        "2. Remove Part\n"
+        "3. Search for Part by Name\n"
+        "4. Display All Parts\n"
+        "5. Populate Random Parts\n"
+        "6. Import from File\n"
+        "7. Export to File\n"
+        "8. Exit\n";
+
 //menu
 void menu() {
     std::unordered_map<std::string, int> PartsMap;
