@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream> // for file handling
 
-void removePart(std::unordered_map<std::string, int>& PartsMap, const std::string& partName) {
+void removePart(std::unordered_map<std::string, int> &PartsMap, const std::string &partName) {
     auto it = PartsMap.find(partName);
     if (it != PartsMap.end()) {
         PartsMap.erase(it);
@@ -14,13 +14,13 @@ void removePart(std::unordered_map<std::string, int>& PartsMap, const std::strin
 }
 
 // function to export data to file
-void exporttofile(const std::unordered_map<std::string, int>& PartsMap, const std::string& filename) {
+void exportToFile(const std::unordered_map<std::string, int> &PartsMap, const std::string &filename) {
     std::ofstream outfile(filename);
     if (!outfile) {
         std::cout << "Error opening file '" << filename << "' for writing.\n";
         return;
     }
-    for (const auto& entry : PartsMap) {
+    for (const auto &entry: PartsMap) {
         outfile << entry.first << " " << entry.second << "\n"; // write part name and number to file
     }
     outfile.close(); // close the file
@@ -28,7 +28,7 @@ void exporttofile(const std::unordered_map<std::string, int>& PartsMap, const st
 }
 
 // function to import data from file
-void importfromfile(std::unordered_map<std::string, int>& PartsMap, const std::string& filename) {
+void importFromFile(std::unordered_map<std::string, int> &PartsMap, const std::string &filename) {
     std::ifstream infile(filename);
     if (!infile) {
         std::cout << "Error opening file '" << filename << "' for reading.\n";
@@ -45,48 +45,32 @@ void importfromfile(std::unordered_map<std::string, int>& PartsMap, const std::s
 }
 
 // Function to search for a part by name
-void searchPart(const std::unordered_map<std::string, int>& PartsMap, const std::string& partName) {
+void searchPart(const std::unordered_map<std::string, int> &PartsMap, const std::string &partName) {
     auto it = PartsMap.find(partName);
     if (it != PartsMap.end()) {
         std::cout << "Part found: " << it->first << " - " << it->second << "\n";
     } else {
         std::cout << "Part '" << partName << "' not found.\n";
     }
+}
 
 // Function to display all parts
-void displayAllParts(const std::unordered_map<std::string, int>& PartsMap) {
+void displayAllParts(const std::unordered_map<std::string, int> &PartsMap) {
     if (PartsMap.empty()) {
         std::cout << "No parts available to display.\n";
         return;
     }
     std::cout << "All parts:\n";
-    for (const auto& entry : PartsMap) {
+    for (const auto &entry: PartsMap) {
         std::cout << entry.first << ": " << entry.second << "\n";
     }
+    //note for the future when printing pairs you can use structured bindings which would just be const auto &[first, second]:
 }
 
-// Menu function
-void menu() {
-    std::unordered_map<std::string, int> PartsMap; // Holds part names and numbers
-    int choice = 0;
-    std::string partName;
-    bool hasSaved = true;
-    bool exit = false;
-
-    const std::string menu =
-        "Please choose one of the following:\n"
-        "1. Add Part\n"
-        "2. Remove Part\n"
-        "3. Search for Part by Name\n"
-        "4. Display All Parts\n"
-        "5. Populate Random Parts\n"
-        "6. Import from File\n"
-        "7. Export to File\n"
-        "8. Exit\n";
 
 //menu
 void menu() {
-    std::unordered_map<std::string, int> PartsMap;
+    std::unordered_map<std::string, int> partsMap;
     // remember to pass a reference to this map to the functions that will manipulate it.
     int choice = 0, value = 0;
     std::string partName;
@@ -120,7 +104,7 @@ void menu() {
                     std::cout << "Part name cannot be empty. Please try again.\n";
                     break;
                 }
-                removePart(PartsMap, partName);
+                removePart(partsMap, partName);
                 hasSaved = false;
                 break;
             }
@@ -133,13 +117,13 @@ void menu() {
                     std::cout << "Part name cannot be empty. Please try again.\n";
                     break;
                 }
-
+                searchPart(partsMap, partName);
                 break;
             }
 
             case 4: {
                 // Display All Parts
-                //TODO display all parts function
+                displayAllParts(partsMap);
                 break;
             }
 
@@ -158,14 +142,14 @@ void menu() {
 
             case 6: {
                 // Import from File
-                importfromfile(PartsMap, "partsdata.txt");
+                importFromFile(partsMap, "partsdata.txt");
                 hasSaved = true;
                 break;
             }
 
             case 7: {
                 // Export to File
-                exporttofile(PartsMap, "partsdata.txt");
+                exportToFile(partsMap, "partsdata.txt");
                 hasSaved = true;
                 break;
             }
@@ -176,7 +160,7 @@ void menu() {
                     char saveChoice;
                     std::cin >> saveChoice;
                     if (saveChoice == 'y' || saveChoice == 'Y') {
-                        exporttofile(PartsMap, "partsdata.txt"); // save to file
+                        exportToFile(partsMap, "partsdata.txt"); // save to file
                     }
                 }
 
